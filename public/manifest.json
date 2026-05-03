@@ -1,0 +1,18 @@
+{
+  "name": "GraceTrack",
+  "short_name": "GraceTrack",
+  "description": "Church Management System — Managing God's House, Beautifully & Faithfully",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
