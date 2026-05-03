@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getMember, checkDuplicate, addTransaction } from '../../firebase/firestore'
 import { useAuth } from '../../hooks/useAuth'
+import { getCurrentWeekCode } from '../../utils/weekCode'
 
 export default function AmountEntry({ data, onComplete, onCancel }) {
   const { user }     = useAuth()
@@ -13,21 +14,29 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
   const [warning,    setWarning]    = useState('')
   const [success,    setSuccess]    = useState(false)
 
+  const effectiveWeekCode = data.weekCode === 'AUTO' ? getCurrentWeekCode() : data.weekCode
   const isTithe = data.type === 'tithe'
 
   useEffect(() => {
     const init = async () => {
       try {
         const m = await getMember(data.memberId)
-        if (!m) { setError('Member not found. The QR code may be invalid.'); setLoading(false); return }
+        if (!m) { 
+          setError('Member not found. Please ensure the QR code is correct.'); 
+          setLoading(false); 
+          return 
+        }
         setMember(m)
-        const isDup = await checkDuplicate(data.memberId, data.type, data.weekCode)
+        const isDup = await checkDuplicate(data.memberId, data.type, effectiveWeekCode)
         if (isDup) setWarning('A transaction of this type has already been recorded for this member this week.')
-      } catch (err) { console.error(err); setError('Error fetching data.') }
+      } catch (err) { 
+        console.error(err); 
+        setError('Error fetching data.') 
+      }
       finally { setLoading(false) }
     }
     init()
-  }, [data])
+  }, [data, effectiveWeekCode])
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -37,10 +46,15 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
     setSubmitting(true); setError('')
     try {
       await addTransaction({
-        memberId: data.memberId, memberName: member.name,
-        type: data.type, amount: parseFloat(amount),
-        weekCode: data.weekCode, date: new Date().toISOString().split('T')[0],
-        submittedBy: user.uid, note: note || null, status: 'completed'
+        memberId: data.memberId, 
+        memberName: member.name,
+        type: data.type, 
+        amount: parseFloat(amount),
+        weekCode: effectiveWeekCode, 
+        date: new Date().toISOString().split('T')[0],
+        submittedBy: user.uid, 
+        note: note || null, 
+        status: 'completed'
       })
       setSuccess(true)
       setTimeout(onComplete, 2000)
