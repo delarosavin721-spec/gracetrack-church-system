@@ -119,21 +119,32 @@ export default function HowItWorks() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-32 w-full max-w-5xl p-1 bg-gradient-to-r from-teal-500 via-teal-400 to-indigo-500 rounded-[3rem] shadow-2xl shadow-teal-200/50"
+          className="mt-32 w-full max-w-6xl relative group"
         >
-          <div className="bg-slate-900 rounded-[2.9rem] py-10 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
+          {/* Animated Glow behind the banner */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-indigo-500 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
+          
+          <div className="relative bg-slate-900 rounded-[3rem] p-8 md:p-16 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-10 border border-white/5">
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-                <p className="text-teal-400 font-bold text-[10px] uppercase tracking-[0.4em]">Ready to scale?</p>
+              <div className="inline-flex items-center gap-2 mb-6 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                <div className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                </div>
+                <p className="text-teal-400 font-bold text-[10px] uppercase tracking-[0.3em]">Ready to scale?</p>
               </div>
-              <p className="text-3xl md:text-4xl font-bold font-playfair text-white leading-tight">
+              
+              <h3 className="text-3xl md:text-5xl font-bold font-playfair text-white leading-tight">
                 Join 50+ churches<br />
                 <span className="text-teal-400">using our platform.</span>
-              </p>
+              </h3>
             </div>
-            <button className="whitespace-nowrap px-10 py-5 bg-teal-500 hover:bg-teal-400 text-white rounded-2xl font-bold text-lg transition-all shadow-xl shadow-teal-900/20 active:scale-95">
+            
+            <button className="whitespace-nowrap px-10 py-5 bg-teal-500 hover:bg-teal-400 text-white rounded-2xl font-bold text-lg transition-all shadow-xl shadow-teal-500/20 active:scale-95 flex items-center gap-3">
               Create Free Account
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
             </button>
           </div>
         </motion.div>
