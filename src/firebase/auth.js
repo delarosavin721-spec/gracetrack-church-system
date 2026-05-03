@@ -18,7 +18,7 @@ export const registerUser = async (email, password, name, role = 'usher') => {
     email,
     role,
     createdAt: serverTimestamp(),
-    active: true,
+    active: false, // Changed to false for approval system
   })
 
   return credential

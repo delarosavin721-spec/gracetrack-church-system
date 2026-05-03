@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginUser, getUserRole } from '../../firebase/auth'
+import { loginUser, getUserRole, logoutUser } from '../../firebase/auth'
 
 export default function LoginForm({ onSwitchToRegister, onClose }) {
   const [email, setEmail] = useState('')
@@ -19,6 +19,13 @@ export default function LoginForm({ onSwitchToRegister, onClose }) {
       const userCredential = await loginUser(email, password)
       const userData = await getUserRole(userCredential.user.uid)
       
+      if (userData && userData.active === false) {
+        await logoutUser()
+        setError('Your account is pending approval by an admin.')
+        setLoading(false)
+        return
+      }
+
       onClose()
       
       if (userData?.role === 'admin') {

@@ -134,7 +134,16 @@ export const getDailyVerse = async (dateKey) => {
   return snap.exists() ? snap.data() : null
 }
 
-// ── USERS (Ushers) ──────────────────────────────────────────
+// ── USERS (System Users) ────────────────────────────────────
+export const onUsersChange = (callback) => {
+  return onSnapshot(query(collection(db, 'users'), orderBy('createdAt', 'desc')), (snap) => {
+    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+  })
+}
+
+export const updateUserStatus = async (uid, active) => {
+  await updateDoc(doc(db, 'users', uid), { active, updatedAt: serverTimestamp() })
+}
 
 export const getUshers = async () => {
   const q = query(collection(db, 'users'), where('role', '==', 'usher'))

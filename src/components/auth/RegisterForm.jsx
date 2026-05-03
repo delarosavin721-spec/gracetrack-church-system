@@ -51,8 +51,8 @@ export default function RegisterForm({ onSwitchToLogin, onClose }) {
 
     try {
       await registerUser(email, password, name, role)
-      onClose()
-      navigate(role === 'admin' ? '/admin' : '/usher')
+      setSuccess(true)
+      // We don't close or navigate yet, let them read the message
     } catch (err) {
       console.error("Registration Error details:", err)
       if (err.code === 'auth/email-already-in-use') {
@@ -65,6 +65,30 @@ export default function RegisterForm({ onSwitchToLogin, onClose }) {
     } finally {
       setLoading(false)
     }
+  }
+
+  const [success, setSuccess] = useState(false)
+
+  if (success) {
+    return (
+      <div className="flex flex-col items-center py-8 text-center animate-fadeInUp">
+        <div className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center text-teal-600 mb-6 border border-teal-100 success-icon">
+          <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="font-playfair text-3xl font-bold text-slate-800 mb-3">Registration Sent!</h2>
+        <p className="text-slate-500 font-dmsans max-w-[300px] leading-relaxed mb-8">
+          Your account has been created. Please wait for an <span className="text-teal-600 font-bold uppercase">Admin</span> to approve your access.
+        </p>
+        <button 
+          onClick={onSwitchToLogin}
+          className="btn-primary w-full py-3.5"
+        >
+          Back to Sign In
+        </button>
+      </div>
+    )
   }
 
   return (
