@@ -165,3 +165,30 @@ export const logEmail = async (data) => {
     sentAt: serverTimestamp(),
   })
 }
+// ── LANDING PAGE STATS ──────────────────────────────────────
+export const getLandingStats = async () => {
+  try {
+    const memberSnap = await getDocs(collection(db, 'members'))
+    const transSnap = await getDocs(collection(db, 'transactions'))
+    
+    const membersCount = memberSnap.size
+    let totalAmount = 0
+    const uniqueWeeks = new Set()
+
+    transSnap.docs.forEach(doc => {
+      const data = doc.data()
+      totalAmount += (data.amount || 0)
+      if (data.weekCode) uniqueWeeks.add(data.weekCode)
+    })
+
+    return {
+      members: membersCount,
+      totalAmount: totalAmount,
+      weeksActive: uniqueWeeks.size || 0,
+      paperless: 100 // Constant for digital system
+    }
+  } catch (err) {
+    console.error("Error fetching landing stats:", err)
+    return { members: 0, totalAmount: 0, weeksActive: 0, paperless: 100 }
+  }
+}
