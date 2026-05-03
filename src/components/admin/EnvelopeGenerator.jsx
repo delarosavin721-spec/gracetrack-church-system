@@ -48,41 +48,31 @@ export default function EnvelopeGenerator({ member, onClose }) {
           </div>
         </div>
 
-        {/* QR Cards */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {/* Tithe */}
-          <div className="flex flex-col items-center p-5 bg-teal-50 rounded-2xl border border-teal-100 gap-4">
-            <p className="text-xs font-bold text-teal-700 uppercase tracking-widest">Tithe</p>
-            <div ref={titheRef} className="p-2 bg-white rounded-xl shadow-sm">
-              <QRCodeCanvas value={titheBarcodeStr} size={130} level="H" includeMargin />
-            </div>
-            <button
-              onClick={() => downloadQR(titheRef, 'tithe')}
-              className="btn-primary w-full text-xs py-2 gap-1.5"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Download
-            </button>
+        {/* QR Card */}
+        <div className="flex flex-col items-center p-8 bg-slate-50 rounded-3xl border border-slate-200 gap-6 mb-6 shadow-inner">
+          <div className="text-center">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">Official Member QR</p>
+            <h4 className="font-playfair text-2xl font-bold text-slate-800 tracking-tight">{member.name}</h4>
+          </div>
+          
+          <div ref={titheRef} className="p-4 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100">
+            <QRCodeCanvas 
+              value={member.id} 
+              size={180} 
+              level="H" 
+              includeMargin 
+            />
           </div>
 
-          {/* Offering */}
-          <div className="flex flex-col items-center p-5 bg-indigo-50 rounded-2xl border border-indigo-100 gap-4">
-            <p className="text-xs font-bold text-indigo-700 uppercase tracking-widest">Offering</p>
-            <div ref={offeringRef} className="p-2 bg-white rounded-xl shadow-sm">
-              <QRCodeCanvas value={offeringBarcodeStr} size={130} level="H" includeMargin />
-            </div>
-            <button
-              onClick={() => downloadQR(offeringRef, 'offering')}
-              className="w-full py-2 text-xs font-semibold rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors flex items-center justify-center gap-1.5"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Download
-            </button>
-          </div>
+          <button
+            onClick={() => downloadQR(titheRef, 'MEMBER')}
+            className="btn-primary w-full py-4 text-sm gap-2.5 shadow-teal-200"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download Member QR
+          </button>
         </div>
 
         <button onClick={onClose} className="w-full text-center text-sm text-slate-400 hover:text-slate-600 transition-colors py-1">
