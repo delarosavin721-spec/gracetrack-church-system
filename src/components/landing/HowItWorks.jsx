@@ -116,18 +116,26 @@ export default function HowItWorks() {
 
         {/* Bottom Call to Action hint */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-24 py-8 px-12 rounded-[2rem] bg-slate-900 text-white flex flex-col md:flex-row items-center gap-8 shadow-2xl shadow-slate-200"
+          className="mt-32 w-full max-w-5xl p-1 bg-gradient-to-r from-teal-500 via-teal-400 to-indigo-500 rounded-[3rem] shadow-2xl shadow-teal-200/50"
         >
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <p className="text-teal-400 font-bold text-[10px] uppercase tracking-[0.3em] mb-1">Ready to scale?</p>
-            <p className="text-xl font-bold font-playfair">Join 50+ churches using our platform.</p>
+          <div className="bg-slate-900 rounded-[2.9rem] py-10 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+                <p className="text-teal-400 font-bold text-[10px] uppercase tracking-[0.4em]">Ready to scale?</p>
+              </div>
+              <p className="text-3xl md:text-4xl font-bold font-playfair text-white leading-tight">
+                Join 50+ churches<br />
+                <span className="text-teal-400">using our platform.</span>
+              </p>
+            </div>
+            <button className="whitespace-nowrap px-10 py-5 bg-teal-500 hover:bg-teal-400 text-white rounded-2xl font-bold text-lg transition-all shadow-xl shadow-teal-900/20 active:scale-95">
+              Create Free Account
+            </button>
           </div>
-          <button className="px-8 py-3 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-teal-500 hover:text-white transition-all shadow-lg">
-            Create Free Account
-          </button>
         </motion.div>
       </div>
     </section>
