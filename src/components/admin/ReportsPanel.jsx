@@ -49,7 +49,7 @@ export default function ReportsPanel() {
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(11)
       doc.setFont('helvetica', 'bold')
-      doc.text('GraceTrack Church Management System', 14, 9.5)
+      doc.text('CCCCPGI Church Management System', 14, 9.5)
 
       // Title
       doc.setTextColor(15, 23, 42)
@@ -114,7 +114,7 @@ export default function ReportsPanel() {
           alternateRowStyles: { fillColor: [248, 250, 252] },
         })
 
-        doc.save(`GraceTrack_Monthly_${selectedMonth}.pdf`)
+        doc.save(`CCCCPGI_Monthly_${selectedMonth}.pdf`)
 
       } else if (reportType === 'member_statement') {
         const member = members.find(m => m.id === selectedMember)
@@ -161,7 +161,7 @@ export default function ReportsPanel() {
         doc.text('"For God loves a cheerful giver." — 2 Corinthians 9:7', 14, finalY + 12)
         doc.text('Thank you for your generous support. This statement is valid for tax purposes where applicable.', 14, finalY + 18)
 
-        doc.save(`GraceTrack_Statement_${member.name.replace(/\s+/g, '_')}_${selectedYear}.pdf`)
+        doc.save(`CCCCPGI_Statement_${member.name.replace(/\s+/g, '_')}_${selectedYear}.pdf`)
       }
     } finally {
       setGenerating(false)

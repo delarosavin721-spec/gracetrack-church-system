@@ -84,7 +84,7 @@ export const generatePostOfferingEmail = (memberName, amount, type, date, verse)
 <body>
   <div class="container">
     <div class="header">
-      <h1>GraceTrack</h1>
+      <h1>CCCCPGI</h1>
     </div>
     <div class="content">
       <div class="greeting">Dear ${memberName},</div>
@@ -108,7 +108,7 @@ export const generatePostOfferingEmail = (memberName, amount, type, date, verse)
       </div>
     </div>
     <div class="footer">
-      <p>This is an automated email from GraceTrack Church Management System.</p>
+      <p>This is an automated email from CCCCPGI Church Management System.</p>
     </div>
   </div>
 </body>
@@ -164,7 +164,7 @@ export const generateDailyDevotionalEmail = (memberName, devotional, verse) => {
       </div>
     </div>
     <div class="footer">
-      GraceTrack — Managing God's House, Beautifully & Faithfully
+      CCCCPGI — Managing God's House, Beautifully & Faithfully
     </div>
   </div>
 </body>

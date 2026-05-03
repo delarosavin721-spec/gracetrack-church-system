@@ -34,7 +34,7 @@ export default function TransactionsLog() {
     const blob = new Blob([rows.map(r => r.join(',')).join('\n')], { type: 'text/csv' })
     const a    = document.createElement('a')
     a.href     = URL.createObjectURL(blob)
-    a.download = `gracetrack_${new Date().toISOString().split('T')[0]}.csv`
+    a.download = `ccccpgi_${new Date().toISOString().split('T')[0]}.csv`
     a.click()
   }
 

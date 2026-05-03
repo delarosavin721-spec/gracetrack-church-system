@@ -49,7 +49,7 @@ export default function LoginForm({ onSwitchToRegister, onClose }) {
           </svg>
         </div>
         <h2 className="font-playfair text-3xl text-gray-800 font-bold">Welcome Back</h2>
-        <p className="text-gray-400 text-sm mt-1 font-dmsans">Sign in to your GraceTrack account</p>
+        <p className="text-gray-400 text-sm mt-1 font-dmsans">Sign in to your CCCCPGI account</p>
       </div>
 
       {error && (
