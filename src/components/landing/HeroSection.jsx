@@ -37,7 +37,7 @@ export default function HeroSection({ onOpenRegister }) {
           </motion.h1>
 
           <motion.p variants={item} className="text-white/80 text-lg md:text-xl font-outfit font-light mb-8 max-w-lg">
-            Streamline your church's administration with GraceTrack — the modern platform built for faithful communities.
+            Streamline your church's administration with CCCCPGI — the modern platform built for faithful communities.
           </motion.p>
 
           <motion.div variants={item} className="flex flex-wrap gap-4">

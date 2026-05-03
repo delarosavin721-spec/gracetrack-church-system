@@ -21,12 +21,10 @@ export default function Navbar({ user, role }) {
           onClick={() => navigate(role === 'admin' ? '/admin' : '/usher')}
           className="flex items-center gap-2.5 group"
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-md shadow-teal-200 group-hover:scale-105 transition-transform">
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11 2v6h-4v4h4v10h4v-10h4v-4h-4v-6h-4z" />
-            </svg>
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shadow-md shadow-teal-200 group-hover:scale-105 transition-transform bg-white border border-slate-100">
+            <img src="/logo.png" alt="CCCCPGI Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="font-playfair font-bold text-xl text-slate-900 tracking-wide">GraceTrack</span>
+          <span className="font-playfair font-bold text-xl text-slate-900 tracking-wide">CCCCPGI</span>
         </button>
 
         {/* Right */}

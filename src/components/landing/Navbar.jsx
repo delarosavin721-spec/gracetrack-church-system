@@ -41,16 +41,12 @@ export default function LandingNavbar({ onOpenLogin, onOpenRegister }) {
           <div className="flex justify-between items-center h-14">
             {/* Logo */}
             <a href="#" className="flex items-center gap-2 group">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
-                isScrolled ? 'bg-teal-600 text-white' : 'bg-white/20 text-white'
-              }`}>
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M11 2v6h-4v4h4v10h4v-10h4v-4h-4v-6h-4z"/>
-                </svg>
+              <div className={`w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center transition-all bg-white border border-slate-100 p-1`}>
+                <img src="/logo.png" alt="CCCCPGI Logo" className="w-full h-full object-contain" />
               </div>
               <span className={`font-cormorant font-bold text-2xl tracking-wide ${
                 isScrolled ? 'text-gray-800' : 'text-white'
-              }`}>GraceTrack</span>
+              }`}>CCCCPGI</span>
             </a>
 
             {/* Desktop Nav */}

@@ -111,7 +111,7 @@ export const getMemberAttendance = async (memberId) => {
 export const getChurchSettings = async () => {
   const snap = await getDoc(doc(db, 'churchSettings', 'main'))
   return snap.exists() ? snap.data() : {
-    churchName: 'Grace Church',
+    churchName: 'CCCCPGI',
     serviceTime: '9:00 AM',
     fridayStudyTime: '6:00 PM',
     location: 'Church Address',
