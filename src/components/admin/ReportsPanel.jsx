@@ -4,6 +4,7 @@ import { useMembers } from '../../hooks/useMembers'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import { formatCurrency, formatDate } from '../../utils/weekCode'
+import PageHeader from '../shared/PageHeader'
 
 const REPORT_TYPES = [
   {
@@ -178,14 +179,14 @@ export default function ReportsPanel() {
 
   return (
     <div className="page-content space-y-6">
-      <div>
-        <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Reports</h1>
-        <p className="text-sm text-slate-500 mt-1">Generate and download PDF financial statements</p>
-      </div>
+      <PageHeader
+        eyebrow="export"
+        title="Reports"
+        description="Generate and download PDF financial statements."
+      />
 
       <div className="max-w-2xl space-y-6">
-        {/* Report Type */}
-        <div className="card-flat p-6">
+        <div className="panel p-6">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Select Report Type</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {REPORT_TYPES.map(rt => (
@@ -208,7 +209,7 @@ export default function ReportsPanel() {
         </div>
 
         {/* Parameters */}
-        <div className="card-flat p-6 space-y-4">
+        <div className="panel p-6 space-y-4">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Parameters</p>
           {reportType === 'monthly_summary' && (
             <div>

@@ -7,20 +7,24 @@ import ScannerDashboard from '../components/usher/ScannerDashboard'
 import PageHeader from '../components/shared/PageHeader'
 
 const ScanHistory = () => (
-  <div className="page-content max-w-2xl">
+  <div className="page-content usher-page">
     <PageHeader
       eyebrow="live"
       title="Scan History"
       description="Transactions recorded in your current session."
     />
-    <div className="premium-card p-12 text-center">
-      <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl bg-slate-50 border border-slate-100">
-        📜
+    <div className="panel">
+      <div className="empty-state py-16">
+        <div className="empty-state__icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 className="empty-state__title">No transactions yet</h3>
+        <p className="empty-state__desc">
+          Start scanning member QR codes to see them listed here.
+        </p>
       </div>
-      <h3 className="text-slate-800 font-bold text-lg mb-2">No transactions yet</h3>
-      <p className="text-sm text-slate-400 max-w-[220px] mx-auto leading-relaxed">
-        Start scanning member QR codes to see them listed here.
-      </p>
     </div>
   </div>
 )
@@ -40,13 +44,11 @@ export default function UsherHome() {
       <div className="h-16 shrink-0 w-full" />
 
       <main id="main-scroll-container" className="app-main">
-        <div className="max-w-lg mx-auto">
-          <Routes>
-            <Route path="/" element={<ScannerDashboard />} />
-            <Route path="/history" element={<ScanHistory />} />
-            <Route path="*" element={<Navigate to="/usher" replace />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<ScannerDashboard />} />
+          <Route path="/history" element={<ScanHistory />} />
+          <Route path="*" element={<Navigate to="/usher" replace />} />
+        </Routes>
       </main>
 
       <BottomNav role={role} />

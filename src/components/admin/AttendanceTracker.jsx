@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useMembers } from '../../hooks/useMembers'
 import { getAttendance, markAttendance } from '../../firebase/firestore'
+import PageHeader from '../shared/PageHeader'
+import AppLoading from '../shared/AppLoading'
 
 export default function AttendanceTracker() {
   const { members, loading: memLoading } = useMembers()
@@ -43,25 +45,16 @@ export default function AttendanceTracker() {
   const presentCount   = Object.values(attendanceData).filter(Boolean).length
   const percentage     = activeMembers.length > 0 ? Math.round((presentCount / activeMembers.length) * 100) : 0
 
-  if (memLoading) return (
-    <div className="flex items-center justify-center min-h-96">
-      <div className="flex flex-col items-center gap-3">
-        <div className="spinner" /><p className="text-sm text-slate-400 animate-pulse">Loading members...</p>
-      </div>
-    </div>
-  )
+  if (memLoading) return <AppLoading message="Loading members…" />
 
   return (
     <div className="page-content space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-        <div>
-          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Attendance</h1>
-          <p className="text-sm text-slate-500 mt-1">Track Sunday service presence</p>
-        </div>
-
-        {/* Stat */}
-        <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-2xl px-5 py-3 shadow-sm shrink-0">
+      <PageHeader
+        eyebrow="service"
+        title="Attendance"
+        description="Track Sunday service presence for active members."
+        action={
+        <div className="flex items-center gap-4 panel px-5 py-3 shrink-0 !shadow-soft">
           <div className="text-center">
             <div className="text-2xl font-bold text-teal-600 font-outfit leading-none">{presentCount}</div>
             <div className="text-xs text-slate-400 mt-0.5">Present</div>
@@ -77,10 +70,10 @@ export default function AttendanceTracker() {
             <div className="text-xs text-slate-400 mt-0.5">Rate</div>
           </div>
         </div>
-      </div>
+        }
+      />
 
-      {/* Progress bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="panel p-5">
         <div className="flex justify-between text-xs text-slate-500 mb-2">
           <span>Attendance progress</span>
           <span className="font-semibold">{presentCount}/{activeMembers.length} present</span>
@@ -93,19 +86,23 @@ export default function AttendanceTracker() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="toolbar">
         <input
-          type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)}
+          type="date"
+          value={selectedDate}
+          onChange={e => setSelectedDate(e.target.value)}
           className="input sm:w-48"
         />
-        <div className="relative flex-1 max-w-sm">
-          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="search-field flex-1 max-w-sm">
+          <svg className="search-field__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
-            type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Search member..." className="input pl-9"
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search member…"
+            className="search-field__input"
           />
         </div>
       </div>

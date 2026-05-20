@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getChurchSettings, updateChurchSettings } from '../../firebase/firestore'
+import PageHeader from '../shared/PageHeader'
+import AppLoading from '../shared/AppLoading'
 
 function Toggle({ checked, onChange, label, desc }) {
   return (
@@ -56,24 +58,18 @@ export default function Settings() {
     } finally { setSaving(false) }
   }
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-96">
-      <div className="flex flex-col items-center gap-3">
-        <div className="spinner" /><p className="text-sm text-slate-400 animate-pulse">Loading settings...</p>
-      </div>
-    </div>
-  )
+  if (loading) return <AppLoading message="Loading settings…" />
 
   return (
     <div className="page-content space-y-6">
-      <div>
-        <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Settings</h1>
-        <p className="text-sm text-slate-500 mt-1">Configure global church preferences</p>
-      </div>
+      <PageHeader
+        eyebrow="system"
+        title="Settings"
+        description="Configure global church preferences and automation."
+      />
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
-        {/* Church Info */}
-        <div className="card-flat p-6 space-y-4">
+        <div className="panel p-6 space-y-4">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Church Information</p>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Church Name</label>
@@ -96,7 +92,7 @@ export default function Settings() {
         </div>
 
         {/* Automation */}
-        <div className="card-flat p-6 space-y-4">
+        <div className="panel p-6 space-y-4">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Automation</p>
           <Toggle
             checked={settings.emailEnabled}

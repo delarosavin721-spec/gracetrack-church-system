@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { onUsersChange, updateUserStatus } from '../../firebase/firestore'
+import PageHeader from '../shared/PageHeader'
+import AppLoading from '../shared/AppLoading'
 
 export default function UserManagement() {
   const [users, setUsers] = useState([])
@@ -22,23 +24,18 @@ export default function UserManagement() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="spinner" />
-      </div>
-    )
-  }
+  if (loading) return <AppLoading message="Loading users…" />
 
   const pendingUsers = users.filter(u => u.active === false)
   const activeUsers = users.filter(u => u.active === true)
 
   return (
     <div className="page-content space-y-8">
-      <div>
-        <h1 className="font-playfair text-3xl font-bold text-slate-900">User Management</h1>
-        <p className="text-sm text-slate-500 mt-1">Approve or manage system access for admins and ushers.</p>
-      </div>
+      <PageHeader
+        eyebrow="access"
+        title="User Management"
+        description="Approve or manage system access for admins and ushers."
+      />
 
       {/* Pending Approvals */}
       {pendingUsers.length > 0 && (
@@ -49,10 +46,10 @@ export default function UserManagement() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {pendingUsers.map(user => (
-              <div key={user.uid} className="glass p-5 rounded-3xl border-amber-100 bg-amber-50/30">
+              <div key={user.uid} className="panel p-5 border-amber-200/80 bg-gradient-to-br from-amber-50/80 to-white">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-xl">
-                    👤
+                  <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-lg">
+                    {user.name?.[0]?.toUpperCase() || '?'}
                   </div>
                   <span className={`badge ${user.role === 'admin' ? 'badge-tithe' : 'badge-offering'}`}>
                     {user.role}
@@ -73,10 +70,13 @@ export default function UserManagement() {
       )}
 
       {/* All Users Table */}
-      <div className="glass rounded-[2rem] border-white shadow-xl shadow-slate-200/50 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="font-playfair text-xl font-bold text-slate-800">System Users</h2>
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{activeUsers.length} Active</span>
+      <div className="panel overflow-hidden">
+        <div className="panel__head !mb-0">
+          <div>
+            <h2 className="panel__title">System Users</h2>
+            <p className="panel__subtitle">All registered accounts</p>
+          </div>
+          <span className="filter-pill filter-pill--active pointer-events-none">{activeUsers.length} Active</span>
         </div>
         <div className="overflow-x-auto">
           <table className="table-glass">

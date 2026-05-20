@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useMembers } from '../../hooks/useMembers'
 import { addMember, updateMember, deleteMember } from '../../firebase/firestore'
 import EnvelopeGenerator from './EnvelopeGenerator'
+import PageHeader from '../shared/PageHeader'
+import AppLoading from '../shared/AppLoading'
 
 function MemberModal({ member, onClose, onSave }) {
   const [form, setForm] = useState(member || { name: '', email: '', phone: '', address: '', active: true })
@@ -95,52 +97,41 @@ export default function MembersTable() {
     finally { setDeleting(null) }
   }
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-96">
-      <div className="flex flex-col items-center gap-3">
-        <div className="spinner" />
-        <p className="text-sm text-slate-400 animate-pulse">Loading members...</p>
-      </div>
-    </div>
-  )
+  if (loading) return <AppLoading message="Loading members…" />
 
   return (
     <>
       <div className="page-content space-y-6">
-        {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Member Directory</h1>
-          <p className="text-sm text-slate-500 mt-1">{members.length} {members.length === 1 ? 'member' : 'members'} registered</p>
-        </div>
-        <button
-          onClick={() => setModal('add')}
-          className="btn-primary gap-2 shrink-0"
-          id="add-member-btn"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Member
-        </button>
-      </div>
-
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input
-          type="text"
-          placeholder="Search members..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="input pl-9"
+        <PageHeader
+          eyebrow="directory"
+          title="Member Directory"
+          description={`${members.length} ${members.length === 1 ? 'member' : 'members'} registered — manage profiles and QR envelopes.`}
+          action={
+            <button onClick={() => setModal('add')} className="btn-primary gap-2 shrink-0" id="add-member-btn">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Member
+            </button>
+          }
         />
-      </div>
 
-      {/* Table */}
-      <div className="card-flat overflow-hidden">
+        <div className="toolbar">
+          <div className="search-field">
+            <svg className="search-field__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search members…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="search-field__input"
+            />
+          </div>
+        </div>
+
+        <div className="panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="table-glass w-full">
             <thead>
@@ -228,8 +219,8 @@ export default function MembersTable() {
             </tbody>
           </table>
         </div>
+        </div>
       </div>
-    </div>
 
       {/* Modals */}
       {modal && (

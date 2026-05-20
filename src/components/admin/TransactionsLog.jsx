@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useTransactions } from '../../hooks/useTransactions'
 import { formatCurrency, formatDate } from '../../utils/weekCode'
 import { deleteTransaction } from '../../firebase/firestore'
+import PageHeader from '../shared/PageHeader'
+import AppLoading from '../shared/AppLoading'
 
 export default function TransactionsLog() {
   const { transactions, loading } = useTransactions()
@@ -38,29 +40,23 @@ export default function TransactionsLog() {
     a.click()
   }
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-96">
-      <div className="flex flex-col items-center gap-3">
-        <div className="spinner" /><p className="text-sm text-slate-400 animate-pulse">Loading transactions...</p>
-      </div>
-    </div>
-  )
+  if (loading) return <AppLoading message="Loading transactions…" />
 
   return (
     <div className="page-content space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Tithes & Offerings</h1>
-          <p className="text-sm text-slate-500 mt-1">Complete log of all giving records</p>
-        </div>
-        <button onClick={exportCSV} className="btn-ghost gap-2 shrink-0">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          Export CSV
-        </button>
-      </div>
+      <PageHeader
+        eyebrow="giving"
+        title="Tithes & Offerings"
+        description="Complete log of all giving records with export."
+        action={
+          <button type="button" onClick={exportCSV} className="btn-ghost gap-2 shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export CSV
+          </button>
+        }
+      />
 
       {/* Summary Chips */}
       <div className="flex flex-wrap gap-3">
@@ -78,15 +74,17 @@ export default function TransactionsLog() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="toolbar">
+        <div className="search-field flex-1 max-w-md">
+          <svg className="search-field__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
-            type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Search by member or week..." className="input pl-9"
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by member or week…"
+            className="search-field__input"
           />
         </div>
         <select value={typeFilter} onChange={e => setType(e.target.value)} className="input sm:w-44">
@@ -96,8 +94,7 @@ export default function TransactionsLog() {
         </select>
       </div>
 
-      {/* Table */}
-      <div className="card-flat overflow-hidden">
+      <div className="panel overflow-hidden">
         <div className="overflow-x-auto">
           <table className="table-glass w-full">
             <thead>
