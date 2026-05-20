@@ -177,7 +177,7 @@ export default function ReportsPanel() {
   )
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 animate-fadeInUp">
+    <div className="page-content space-y-6">
       <div>
         <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Reports</h1>
         <p className="text-sm text-slate-500 mt-1">Generate and download PDF financial statements</p>

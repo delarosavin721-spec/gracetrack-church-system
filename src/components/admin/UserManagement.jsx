@@ -34,7 +34,7 @@ export default function UserManagement() {
   const activeUsers = users.filter(u => u.active === true)
 
   return (
-    <div className="p-6 sm:p-8 space-y-8 animate-fadeInUp">
+    <div className="page-content space-y-8">
       <div>
         <h1 className="font-playfair text-3xl font-bold text-slate-900">User Management</h1>
         <p className="text-sm text-slate-500 mt-1">Approve or manage system access for admins and ushers.</p>

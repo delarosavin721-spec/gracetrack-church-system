@@ -65,7 +65,7 @@ export default function Settings() {
   )
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 animate-fadeInUp">
+    <div className="page-content space-y-6">
       <div>
         <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-slate-900">Settings</h1>
         <p className="text-sm text-slate-500 mt-1">Configure global church preferences</p>

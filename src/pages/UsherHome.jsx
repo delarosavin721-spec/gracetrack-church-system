@@ -4,22 +4,21 @@ import { useAuth } from '../hooks/useAuth'
 import Navbar from '../components/shared/Navbar'
 import BottomNav from '../components/shared/BottomNav'
 import ScannerDashboard from '../components/usher/ScannerDashboard'
+import PageHeader from '../components/shared/PageHeader'
 
 const ScanHistory = () => (
-  <div className="p-6 sm:p-8 animate-fadeInUp">
-    <div className="flex items-center gap-2 mb-2">
-      <div className="pulse-live" />
-      <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Active Session</span>
-    </div>
-    <h1 className="font-playfair text-3xl font-bold text-slate-900 mb-2">Scan History</h1>
-    <p className="text-sm text-slate-500 mb-8">Transactions recorded in your current session.</p>
-    
-    <div className="glass p-12 text-center rounded-[2rem] border border-white shadow-xl shadow-slate-200/40">
-      <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-slate-100 text-3xl">
+  <div className="page-content max-w-2xl">
+    <PageHeader
+      eyebrow="live"
+      title="Scan History"
+      description="Transactions recorded in your current session."
+    />
+    <div className="premium-card p-12 text-center">
+      <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl bg-slate-50 border border-slate-100">
         📜
       </div>
-      <h3 className="text-slate-800 font-bold mb-1">No transactions yet</h3>
-      <p className="text-sm text-slate-400 max-w-[200px] mx-auto leading-relaxed">
+      <h3 className="text-slate-800 font-bold text-lg mb-2">No transactions yet</h3>
+      <p className="text-sm text-slate-400 max-w-[220px] mx-auto leading-relaxed">
         Start scanning member QR codes to see them listed here.
       </p>
     </div>
@@ -36,13 +35,12 @@ export default function UsherHome() {
   }, [location.pathname])
 
   return (
-    <div className="fixed inset-0 bg-slate-50 font-dmsans overflow-hidden flex flex-col">
+    <div className="app-shell">
       <Navbar user={user} role={role} />
-      {/* Spacer to push content exactly below fixed Navbar */}
       <div className="h-16 shrink-0 w-full" />
 
-      <main id="main-scroll-container" className="flex-1 overflow-y-auto relative">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 pb-24">
+      <main id="main-scroll-container" className="app-main">
+        <div className="max-w-lg mx-auto">
           <Routes>
             <Route path="/" element={<ScannerDashboard />} />
             <Route path="/history" element={<ScanHistory />} />
@@ -50,6 +48,7 @@ export default function UsherHome() {
           </Routes>
         </div>
       </main>
+
       <BottomNav role={role} />
     </div>
   )

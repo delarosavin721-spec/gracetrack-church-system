@@ -27,7 +27,7 @@ export default function ParticleCanvas() {
         this.baseSize = this.size
         this.speedY = (Math.random() * 0.5) + 0.1 // Drift upward
         this.speedX = (Math.random() - 0.5) * 0.2
-        this.color = `rgba(212, 168, 83, ${Math.random() * 0.5 + 0.1})` // Gold tint
+        this.color = `rgba(45, 212, 191, ${Math.random() * 0.45 + 0.08})` // Teal tint
       }
 
       update() {

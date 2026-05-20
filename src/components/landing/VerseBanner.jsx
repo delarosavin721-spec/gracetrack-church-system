@@ -12,13 +12,11 @@ export default function VerseBanner() {
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95])
 
   return (
-    <section ref={ref} className="bg-slate-950 py-32 md:py-56 flex justify-center w-full relative overflow-hidden">
-      {/* Decorative patterns */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #fff 1px, transparent 0)', backgroundSize: '60px 60px' }} />
-      </div>
-      
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-teal-500/5 to-transparent blur-[120px]" />
+    <section ref={ref} className="py-32 md:py-48 flex justify-center w-full relative overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #030712 0%, #0F172A 50%, #134e4a 100%)' }}>
+      <div className="absolute inset-0 grid-pattern-dark opacity-30" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100%,40rem)] h-64 rounded-full blur-[100px] opacity-40"
+        style={{ background: 'radial-gradient(circle, rgba(12,191,199,0.35), transparent 70%)' }} />
 
       <div className="w-full max-w-5xl px-6 relative z-10 flex flex-col items-center text-center">
         <motion.div style={{ opacity, scale }} className="flex flex-col items-center">

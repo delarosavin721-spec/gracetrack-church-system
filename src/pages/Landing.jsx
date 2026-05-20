@@ -11,36 +11,35 @@ import LoginForm from '../components/auth/LoginForm'
 import RegisterForm from '../components/auth/RegisterForm'
 
 export default function Landing() {
-  const [modalType, setModalType] = useState(null) // 'login', 'register', or null
+  const [modalType, setModalType] = useState(null)
 
   const handleOpenLogin = () => setModalType('login')
   const handleOpenRegister = () => setModalType('register')
   const handleCloseModal = () => setModalType(null)
 
   return (
-    <div className="bg-white min-h-screen text-gray-800 selection:bg-teal-500/20 selection:text-teal-700">
+    <div className="min-h-screen text-slate-800 selection:bg-teal-500/25 selection:text-teal-800 overflow-x-hidden">
       <Navbar onOpenLogin={handleOpenLogin} onOpenRegister={handleOpenRegister} />
-      
+
       <main>
-        <HeroSection onOpenRegister={handleOpenRegister} />
+        <HeroSection onOpenRegister={handleOpenRegister} onOpenLogin={handleOpenLogin} />
         <StatsSection />
         <FeaturesSection />
-        <HowItWorks />
+        <HowItWorks onOpenRegister={handleOpenRegister} />
         <VerseBanner />
       </main>
 
       <Footer />
 
-      {/* Auth Modals */}
       <AuthModal isOpen={modalType !== null} onClose={handleCloseModal}>
         {modalType === 'login' ? (
-          <LoginForm 
-            onSwitchToRegister={handleOpenRegister} 
+          <LoginForm
+            onSwitchToRegister={handleOpenRegister}
             onClose={handleCloseModal}
           />
         ) : modalType === 'register' ? (
-          <RegisterForm 
-            onSwitchToLogin={handleOpenLogin} 
+          <RegisterForm
+            onSwitchToLogin={handleOpenLogin}
             onClose={handleCloseModal}
           />
         ) : null}
