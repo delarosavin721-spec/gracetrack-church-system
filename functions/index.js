@@ -5,6 +5,27 @@ const nodemailer = require('nodemailer')
 admin.initializeApp()
 const db = admin.firestore()
 
+// Inspirational quotes database
+const INSPIRATIONAL_QUOTES = [
+  { verse: "Proverbs 22:9", text: "A generous person will prosper; whoever refreshes others will be refreshed.", category: "generosity" },
+  { verse: "2 Corinthians 9:7", text: "Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.", category: "giving" },
+  { verse: "Malachi 3:10", text: "Bring the whole tithe into the storehouse... and see if I will not throw open the floodgates of heaven and pour out so much blessing.", category: "tithe" },
+  { verse: "Luke 6:38", text: "Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap.", category: "giving" },
+  { verse: "Philippians 4:17", text: "Not that I desire your gifts; what I desire is that more be credited to your account.", category: "giving" },
+  { verse: "1 Timothy 6:18-19", text: "Command them to do good, to be rich in good deeds, and to be generous and willing to share... In this way they will lay up treasure for themselves as a firm foundation for the coming age.", category: "giving" },
+  { verse: "Deuteronomy 16:17", text: "Each of you must bring a gift in proportion to the way the Lord your God has blessed you.", category: "tithe" },
+  { verse: "Proverbs 3:9-10", text: "Honor the Lord with your wealth, with the firstfruits of all your crops; then your barns will be filled to overflowing, and your vats will brim over with new wine.", category: "tithe" },
+  { verse: "Acts 20:35", text: "It is more blessed to give than to receive.", category: "giving" },
+  { verse: "Psalm 37:21", text: "The wicked borrow and do not repay, but the righteous give generously.", category: "generosity" }
+]
+
+const getRandomQuote = (category = null) => {
+  const filtered = category 
+    ? INSPIRATIONAL_QUOTES.filter(q => q.category === category)
+    : INSPIRATIONAL_QUOTES
+  return filtered[Math.floor(Math.random() * filtered.length)]
+}
+
 // SMTP config would typically be read from churchSettings or Firebase config
 const getTransporter = async () => {
   const settingsDoc = await db.collection('churchSettings').doc('main').get()
@@ -18,6 +39,107 @@ const getTransporter = async () => {
     }
   }
   return nodemailer.createTransport(smtpConfig)
+}
+
+// Generate tithes/offering email with inspirational quote
+const generateTitheEmailHTML = ({ memberName, amount, type, date, churchName = 'CCCCPGI' }) => {
+  const quote = type === 'tithe' 
+    ? getRandomQuote('tithe')
+    : getRandomQuote()
+  
+  const typeLabel = type === 'tithe' ? 'Tithe' : 'Offering'
+  const typeColor = type === 'tithe' ? '#059669' : '#0891b2'
+  const typeIcon = type === 'tithe' ? '💚' : '💙'
+  const dateFormatted = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const amountFormatted = parseFloat(amount).toFixed(2)
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${typeLabel} Receipt</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', 'DM Sans', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, ${typeColor} 0%, ${typeColor}dd 100%); color: white; padding: 40px 20px; text-align: center; }
+        .logo { width: 60px; height: 60px; margin: 0 auto 15px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+        .church-name { font-size: 28px; font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
+        .church-tagline { font-size: 13px; opacity: 0.95; letter-spacing: 2px; }
+        .content { padding: 40px 30px; }
+        .greeting { font-size: 18px; color: #1f2937; margin-bottom: 30px; font-weight: 500; }
+        .receipt-box { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid ${typeColor}; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+        .receipt-label { color: #6b7280; font-weight: 500; }
+        .receipt-value { color: #1f2937; font-weight: 600; }
+        .receipt-amount { font-size: 24px !important; color: ${typeColor} !important; margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(0,0,0,0.1); }
+        .type-badge { display: inline-block; background: ${typeColor}; color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 15px; }
+        .quote-section { background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%); padding: 25px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #f59e0b; }
+        .quote-verse { font-size: 12px; color: #92400e; font-weight: 600; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+        .quote-text { font-size: 15px; color: #78350f; line-height: 1.6; font-style: italic; font-family: 'Georgia', serif; }
+        .message { font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 20px; }
+        .footer { background: #f9fafb; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb; }
+        .footer-text { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
+        .divider { height: 1px; background: #e5e7eb; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">${typeIcon}</div>
+            <div class="church-name">${churchName}</div>
+            <div class="church-tagline">TITHES & OFFERINGS</div>
+        </div>
+
+        <div class="content">
+            <div class="greeting">
+                Salamat sa inyong katapatan, <strong>${memberName}</strong>! 🙏
+            </div>
+
+            <span class="type-badge">${typeLabel}</span>
+
+            <div class="receipt-box">
+                <div class="receipt-row">
+                    <span class="receipt-label">Type</span>
+                    <span class="receipt-value">${typeLabel}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Date</span>
+                    <span class="receipt-value">${dateFormatted}</span>
+                </div>
+                <div class="receipt-row receipt-amount">
+                    <span class="receipt-label">Amount</span>
+                    <span class="receipt-value">₱${amountFormatted}</span>
+                </div>
+            </div>
+
+            <div class="quote-section">
+                <div class="quote-verse">${quote.verse}</div>
+                <div class="quote-text">"${quote.text}"</div>
+            </div>
+
+            <div class="message">
+                Your ${typeLabel.toLowerCase()} has been recorded and will bless our church community. 
+                God sees your generosity and faithful heart! ❤️
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">
+                This is an automated receipt from ${churchName}. <br>
+                Please contact us if you have any questions.
+            </div>
+            <div class="divider"></div>
+            <div class="footer-text">
+                © ${new Date().getFullYear()} ${churchName}. All rights reserved.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+  `
 }
 
 // Basic HTML Wrapper
@@ -65,44 +187,58 @@ exports.sendPostOfferingEmail = functions.firestore
     try {
       const transporter = await getTransporter()
       
-      const typeLabel = data.type.charAt(0).toUpperCase() + data.type.slice(1)
-      const amountStr = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(data.amount)
+      // Get church name from settings
+      const churchName = settingsDoc.data()?.churchName || 'CCCCPGI'
       
-      const content = `
-        <p style="font-size: 18px;">Dear ${member.name},</p>
-        <p>Thank you for your faithful giving. Your ${data.type} helps us continue the work of the church.</p>
-        
-        <div style="background-color: #fcf8f0; border: 1px solid #f5c842; border-radius: 8px; padding: 20px; margin: 30px 0;">
-          <p style="margin: 5px 0;"><strong>Amount:</strong> ${amountStr}</p>
-          <p style="margin: 5px 0;"><strong>Type:</strong> ${typeLabel}</p>
-          <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date(data.date).toLocaleDateString()}</p>
-        </div>
+      // Generate beautiful email with inspirational quote
+      const htmlContent = generateTitheEmailHTML({
+        memberName: member.name,
+        amount: data.amount,
+        type: data.type,
+        date: data.date,
+        churchName: churchName
+      })
 
-        <div class="verse-box">
-          <p style="font-size: 18px; font-style: italic; color: #0F172A; margin-top: 0;">"Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."</p>
-          <p style="margin-bottom: 0; color: #71717a; font-size: 14px;">— 2 Corinthians 9:7</p>
-        </div>
-      `
-
+      const typeLabel = data.type.charAt(0).toUpperCase() + data.type.slice(1)
+      
       await transporter.sendMail({
-        from: '"Grace Church" <noreply@gracechurch.local>',
+        from: `"${churchName}" <noreply@gracechurch.local>`,
         to: member.email,
-        subject: `Thank you for your ${typeLabel}`,
-        html: emailHtmlWrapper(content)
+        subject: `✨ Thank you for your ${typeLabel} | ${churchName}`,
+        html: htmlContent
       })
 
       // Log email
       await db.collection('emailLogs').add({
         memberId: member.id,
-        type: 'post_offering',
+        memberEmail: member.email,
+        type: 'tithe_offering',
         transactionId: context.params.transactionId,
+        amount: data.amount,
+        transactionType: data.type,
         sentAt: admin.firestore.FieldValue.serverTimestamp(),
         status: 'success'
       })
 
+      console.log(`Email sent successfully to ${member.email} for ${typeLabel}`)
       return { success: true }
     } catch (error) {
-      console.error('Error sending post-offering email:', error)
+      console.error('Error sending tithe/offering email:', error)
+      
+      // Log failed email attempt
+      try {
+        await db.collection('emailLogs').add({
+          memberId: data.memberId,
+          type: 'tithe_offering',
+          transactionId: context.params.transactionId,
+          sentAt: admin.firestore.FieldValue.serverTimestamp(),
+          status: 'failed',
+          error: error.message
+        })
+      } catch (logErr) {
+        console.error('Could not log email error:', logErr)
+      }
+      
       return { success: false, error: error.message }
     }
   })
