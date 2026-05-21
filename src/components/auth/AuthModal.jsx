@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
@@ -33,10 +34,10 @@ export default function AuthModal({ isOpen, onClose, children }) {
         exit: { scale: 0.96, opacity: 0, y: 16, transition: { duration: 0.2 } },
       }
 
-  return (
+  const modal = (
     <AnimatePresence>
       {isOpen && (
-        <div className="modal-backdrop">
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Sign in or register">
           <motion.div
             variants={backdropVariants}
             initial="hidden"
@@ -118,4 +119,6 @@ export default function AuthModal({ isOpen, onClose, children }) {
       )}
     </AnimatePresence>
   )
+
+  return createPortal(modal, document.body)
 }

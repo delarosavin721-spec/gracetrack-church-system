@@ -1563,9 +1563,14 @@ body {
   min-height: 100vh;
   background: #f8fafc;
 }
-.landing-page > *:not(.page-bg) {
+.landing-page > *:not(.page-bg):not(.modal-backdrop) {
   position: relative;
   z-index: 1;
+}
+.landing-page > .modal-backdrop {
+  position: fixed !important;
+  inset: 0;
+  z-index: 9999 !important;
 }
 .landing-section-light {
   position: relative;
