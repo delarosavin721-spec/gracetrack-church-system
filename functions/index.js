@@ -26,29 +26,10 @@ const getRandomQuote = (category = null) => {
   return filtered[Math.floor(Math.random() * filtered.length)]
 }
 
-// SMTP config - supports SendGrid, Gmail, or custom SMTP
+// SMTP Configuration - Simple and Direct
 const getTransporter = async () => {
   const settingsDoc = await db.collection('churchSettings').doc('main').get()
   
-  // Try SendGrid first (recommended for reliability)
-  if (process.env.SENDGRID_API_KEY) {
-    const sgMail = require('@sendgrid/mail')
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-    return {
-      sendMail: async (options) => {
-        await sgMail.send({
-          to: options.to,
-          from: process.env.SENDGRID_FROM_EMAIL || 'noreply@gracechurch.local',
-          subject: options.subject,
-          html: options.html,
-          text: options.text || null
-        })
-        return { accepted: [options.to] }
-      }
-    }
-  }
-
-  // Fall back to SMTP (Gmail, Yahoo, etc)
   const smtpConfig = settingsDoc.data()?.smtpConfig || {
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT) || 465,
@@ -61,8 +42,9 @@ const getTransporter = async () => {
 
   // Validate SMTP credentials exist
   if (!smtpConfig.auth.user || !smtpConfig.auth.pass) {
-    console.error('SMTP credentials not configured. Set SMTP_USER and SMTP_PASS environment variables.')
-    throw new Error('Email service not configured. Contact administrator.')
+    console.error('❌ SMTP credentials not configured.')
+    console.error('Set environment variables: SMTP_USER and SMTP_PASS')
+    throw new Error('Email service not configured. Set SMTP credentials.')
   }
 
   return nodemailer.createTransport(smtpConfig)
