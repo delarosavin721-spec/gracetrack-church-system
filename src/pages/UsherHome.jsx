@@ -5,6 +5,7 @@ import Navbar from '../components/shared/Navbar'
 import BottomNav from '../components/shared/BottomNav'
 import ScannerDashboard from '../components/usher/ScannerDashboard'
 import PageHeader from '../components/shared/PageHeader'
+import PageBackground from '../components/shared/PageBackground'
 
 const ScanHistory = () => (
   <div className="page-content usher-page">
@@ -40,6 +41,7 @@ export default function UsherHome() {
 
   return (
     <div className="app-shell">
+      <PageBackground variant="app" />
       <Navbar user={user} role={role} />
       <div className="h-16 shrink-0 w-full" />
 

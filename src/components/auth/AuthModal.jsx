@@ -42,7 +42,7 @@ export default function AuthModal({ isOpen, onClose, children }) {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            className="absolute inset-0 bg-slate-950/80"
+            className="absolute inset-0 bg-slate-950/75 backdrop-blur-md"
             onClick={onClose}
           />
 

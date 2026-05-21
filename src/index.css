@@ -402,12 +402,9 @@ body {
   display: flex; flex-direction: column;
   background: var(--surface-2);
 }
-.app-shell::before {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(12,191,199,0.06), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(99,102,241,0.05), transparent 50%);
+.app-shell > *:not(.page-bg) {
+  position: relative;
+  z-index: 1;
 }
 .app-main {
   flex: 1; min-width: 0; height: 100%; overflow-y: auto;
@@ -1518,3 +1515,148 @@ body {
 .empty-state__desc { font-size: 0.875rem; color: var(--text-3); max-width: 16rem; line-height: 1.5; }
 
 .usher-page { max-width: 28rem; margin: 0 auto; width: 100%; }
+
+/* ============================================
+   v7 — Background imagery & glass UI
+   ============================================ */
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.page-bg__image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  transform: scale(1.04);
+  filter: saturate(1.05) contrast(1.02);
+}
+.page-bg__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(248,250,252,0.92) 0%, rgba(248,250,252,0.88) 100%);
+}
+.page-bg__overlay--hero {
+  background:
+    linear-gradient(105deg, rgba(3,7,18,0.88) 0%, rgba(3,7,18,0.55) 50%, rgba(3,7,18,0.35) 100%),
+    linear-gradient(180deg, rgba(3,7,18,0.4) 0%, rgba(3,7,18,0.15) 50%, rgba(248,250,252,0.97) 100%);
+}
+.page-bg__overlay--auth {
+  background: linear-gradient(160deg, rgba(7,13,24,0.92) 0%, rgba(15,23,42,0.85) 55%, rgba(19,78,74,0.75) 100%);
+}
+.page-bg__mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 90% 10%, rgba(12,191,199,0.12), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 5% 90%, rgba(99,102,241,0.08), transparent 50%);
+}
+
+.landing-page {
+  position: relative;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+.landing-page > *:not(.page-bg) {
+  position: relative;
+  z-index: 1;
+}
+.landing-section-light {
+  position: relative;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.app-shell .page-bg--app .page-bg__overlay {
+  background:
+    linear-gradient(180deg, rgba(248,250,252,0.94) 0%, rgba(241,245,249,0.9) 100%);
+}
+.app-shell .page-bg__image {
+  opacity: 0.35;
+  background-position: center 20%;
+}
+
+/* Glass panels */
+.panel,
+.premium-card,
+.premium-card-flat,
+.stat-card-v5 {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+.panel {
+  border-color: rgba(255,255,255,0.9);
+  box-shadow:
+    0 4px 24px -4px rgba(15,23,42,0.08),
+    0 0 0 1px rgba(255,255,255,0.6) inset;
+}
+.stat-card-v5 {
+  background: rgba(255,255,255,0.88);
+}
+.stat-card-v5:hover {
+  background: rgba(255,255,255,0.95);
+  transform: translateY(-5px);
+}
+
+.auth-modal-brand {
+  background-image: url('/bg-church.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.auth-modal-brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(7,13,24,0.88) 0%, rgba(15,23,42,0.82) 50%, rgba(13,148,136,0.55) 100%);
+  z-index: 0;
+}
+.auth-modal-brand > * {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-modal-form {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+}
+
+.hero-with-bg {
+  background: #030712;
+}
+.hero-with-bg .page-bg {
+  position: absolute;
+  z-index: 0;
+}
+.hero-with-bg .page-bg__image {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.bottom-nav-dock__inner {
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+
+.app-topbar {
+  background: rgba(8, 15, 28, 0.82);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.page-header {
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  border-bottom: none;
+  box-shadow: 0 1px 0 rgba(226,232,240,0.6);
+}

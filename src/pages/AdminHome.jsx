@@ -11,6 +11,7 @@ import AttendanceTracker from '../components/admin/AttendanceTracker'
 import Settings from '../components/admin/Settings'
 import ReportsPanel from '../components/admin/ReportsPanel'
 import UserManagement from '../components/admin/UserManagement'
+import PageBackground from '../components/shared/PageBackground'
 
 export default function AdminHome() {
   const { user, role } = useAuth()
@@ -23,6 +24,7 @@ export default function AdminHome() {
 
   return (
     <div className="app-shell">
+      <PageBackground variant="app" />
       <Navbar user={user} role={role} />
       <div className="h-16 shrink-0 w-full" />
 

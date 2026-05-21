@@ -18,14 +18,18 @@ export default function Landing() {
   const handleCloseModal = () => setModalType(null)
 
   return (
-    <div className="min-h-screen text-slate-800 selection:bg-teal-500/25 selection:text-teal-800 overflow-x-hidden">
+    <div className="landing-page min-h-screen text-slate-800 selection:bg-teal-500/25 selection:text-teal-800 overflow-x-hidden">
       <Navbar onOpenLogin={handleOpenLogin} onOpenRegister={handleOpenRegister} />
 
       <main>
         <HeroSection onOpenRegister={handleOpenRegister} onOpenLogin={handleOpenLogin} />
-        <StatsSection />
+        <div className="landing-section-light">
+          <StatsSection />
+        </div>
         <FeaturesSection />
-        <HowItWorks onOpenRegister={handleOpenRegister} />
+        <div className="landing-section-light">
+          <HowItWorks onOpenRegister={handleOpenRegister} />
+        </div>
         <VerseBanner />
       </main>
 

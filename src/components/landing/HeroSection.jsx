@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import ParticleCanvas from './ParticleCanvas'
+import PageBackground from '../shared/PageBackground'
 
 function DashboardPreview() {
   const bars = [40, 65, 45, 80, 55, 70, 90, 60]
@@ -77,17 +78,14 @@ export default function HeroSection({ onOpenRegister, onOpenLogin }) {
   }
 
   return (
-    <section className="relative min-h-[100vh] flex items-center overflow-hidden" style={{ background: '#030712' }}>
+    <section className="hero-with-bg relative min-h-[100vh] flex items-center overflow-hidden">
+      <PageBackground variant="hero" />
       <ParticleCanvas />
       <div className="absolute inset-0 z-[1] pointer-events-none">
-        <div className="absolute inset-0 grid-pattern-dark opacity-40" />
-        <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(180deg, rgba(3,7,18,0.5) 0%, rgba(3,7,18,0.2) 45%, rgba(248,250,252,0.98) 100%)' }} />
-        <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(105deg, rgba(3,7,18,0.75) 0%, transparent 55%)' }} />
-        <div className="absolute top-1/3 left-1/4 w-[28rem] h-[28rem] rounded-full blur-[140px] opacity-25"
+        <div className="absolute inset-0 grid-pattern-dark opacity-30" />
+        <div className="absolute top-1/3 left-1/4 w-[28rem] h-[28rem] rounded-full blur-[140px] opacity-20"
           style={{ background: 'radial-gradient(circle, #0CBFC7 0%, transparent 70%)' }} />
-        <div className="absolute bottom-1/4 right-1/5 w-72 h-72 rounded-full blur-[120px] opacity-15"
+        <div className="absolute bottom-1/4 right-1/5 w-72 h-72 rounded-full blur-[120px] opacity-12"
           style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }} />
       </div>
 
