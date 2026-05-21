@@ -9,6 +9,7 @@ import Footer from '../components/landing/Footer'
 import AuthModal from '../components/auth/AuthModal'
 import LoginForm from '../components/auth/LoginForm'
 import RegisterForm from '../components/auth/RegisterForm'
+import AdminSetupTroubleshoot from '../components/auth/AdminSetupTroubleshoot'
 
 export default function Landing() {
   const [modalType, setModalType] = useState(null)
@@ -34,6 +35,9 @@ export default function Landing() {
       </main>
 
       <Footer />
+
+      {/* Show troubleshooting widget when login modal is open */}
+      {modalType === 'login' && <AdminSetupTroubleshoot />}
 
       <AuthModal isOpen={modalType !== null} onClose={handleCloseModal}>
         {modalType === 'login' ? (

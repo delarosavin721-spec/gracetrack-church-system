@@ -1,4 +1,5 @@
-import { createDefaultAdmin, getDefaultAdminStatus } from './auth'
+import { createDefaultAdmin } from './auth'
+import { getDefaultAdminStatus } from './firestore'
 
 const DEFAULT_ADMIN_SETUP_KEY = 'churchsystem_default_admin_initialized'
 
@@ -87,3 +88,42 @@ export const resetDefaultAdminFlag = () => {
   }
   return false
 }
+
+/**
+ * Force manual setup of default admin (for troubleshooting)
+ * Can be called from browser console: window.setupDefaultAdminManually()
+ */
+export const setupDefaultAdminManually = async () => {
+  try {
+    console.log('🔧 Starting manual default admin setup...')
+    
+    // Reset the initialization flag to allow re-setup
+    localStorage.removeItem(DEFAULT_ADMIN_SETUP_KEY)
+    
+    // Create the default admin
+    const result = await initializeDefaultAdminOnce()
+    
+    if (result.success && result.created) {
+      console.log('✅ Default Admin Account Created Successfully!')
+      console.log('📧 Email:', result.email)
+      console.log('🔑 Password:', result.password)
+      alert(`✅ Admin account created!\n\nEmail: ${result.email}\nPassword: ${result.password}\n\n⚠️ Change password after first login!`)
+      window.location.reload()
+      return result
+    } else {
+      console.warn('⚠️ Admin account may already exist or setup was skipped')
+      alert('Admin account already exists or setup skipped.')
+      return result
+    }
+  } catch (error) {
+    console.error('❌ Error during manual setup:', error)
+    alert(`❌ Error: ${error.message}`)
+    return { success: false, error: error.message }
+  }
+}
+
+// Make manual setup available from browser console
+if (typeof window !== 'undefined') {
+  window.setupDefaultAdminManually = setupDefaultAdminManually
+}
+
