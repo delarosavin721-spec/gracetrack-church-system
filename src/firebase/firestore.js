@@ -157,6 +157,41 @@ export const getAdmins = async () => {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }))
 }
 
+// ── DEFAULT ADMIN INITIALIZATION ────────────────────────────
+
+export const createDefaultAdminRecord = async (uid) => {
+  try {
+    const snap = await getDoc(doc(db, 'users', uid))
+    if (!snap.exists()) {
+      await setDoc(doc(db, 'users', uid), {
+        uid,
+        name: 'System Admin',
+        email: 'admin@churchsystem.com',
+        role: 'admin',
+        isDefaultAdmin: true,
+        createdAt: serverTimestamp(),
+        active: true, // Pre-approved by default
+      })
+      return true
+    }
+    return false
+  } catch (err) {
+    console.error('Error creating default admin record:', err)
+    throw err
+  }
+}
+
+export const getDefaultAdminStatus = async () => {
+  try {
+    const q = query(collection(db, 'users'), where('isDefaultAdmin', '==', true))
+    const snap = await getDocs(q)
+    return snap.docs.length > 0
+  } catch (err) {
+    console.error('Error checking default admin status:', err)
+    return false
+  }
+}
+
 // ── EMAIL LOGS ──────────────────────────────────────────────
 
 export const logEmail = async (data) => {

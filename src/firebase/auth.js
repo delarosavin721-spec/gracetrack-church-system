@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth'
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from './config'
+import { createDefaultAdminRecord } from './firestore'
 
 export const registerUser = async (email, password, name, role = 'usher') => {
   const credential = await createUserWithEmailAndPassword(auth, email, password)
@@ -44,4 +45,39 @@ export const getUserRole = async (uid) => {
 
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback)
+}
+
+// ── DEFAULT ADMIN SETUP ─────────────────────────────────────
+export const createDefaultAdmin = async () => {
+  const defaultEmail = 'admin@churchsystem.com'
+  const defaultPassword = 'Admin@123Church' // Default password - user should change this
+
+  try {
+    // Create Firebase Auth account
+    const credential = await createUserWithEmailAndPassword(auth, defaultEmail, defaultPassword)
+    const uid = credential.user.uid
+
+    // Create Firestore user record
+    await createDefaultAdminRecord(uid)
+
+    console.log('Default admin account created successfully')
+    return {
+      success: true,
+      email: defaultEmail,
+      password: defaultPassword,
+      uid: uid
+    }
+  } catch (error) {
+    // If user already exists, it's not an error - just log it
+    if (error.code === 'auth/email-already-in-use') {
+      console.log('Default admin account already exists')
+      return {
+        success: false,
+        message: 'Default admin already exists',
+        error: error.code
+      }
+    }
+    console.error('Error creating default admin:', error)
+    throw error
+  }
 }

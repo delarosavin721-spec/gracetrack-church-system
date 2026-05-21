@@ -11,6 +11,7 @@ import AttendanceTracker from '../components/admin/AttendanceTracker'
 import Settings from '../components/admin/Settings'
 import ReportsPanel from '../components/admin/ReportsPanel'
 import UserManagement from '../components/admin/UserManagement'
+import DefaultAdminSetupNotice from '../components/admin/DefaultAdminSetupNotice'
 import PageBackground from '../components/shared/PageBackground'
 
 export default function AdminHome() {
@@ -25,6 +26,7 @@ export default function AdminHome() {
   return (
     <div className="app-shell">
       <PageBackground variant="app" />
+      <DefaultAdminSetupNotice />
       <Navbar user={user} role={role} />
       <div className="h-16 shrink-0 w-full" />
 
