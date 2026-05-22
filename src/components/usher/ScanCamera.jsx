@@ -8,6 +8,27 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
   const scannerRef = useRef(null)
   const audioRef = useRef(null)
 
+  const playBeepSound = () => {
+    try {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0
+        const playPromise = audioRef.current.play()
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => console.log('Beep sound played successfully'))
+            .catch(error => {
+              console.error('Audio playback failed:', error)
+              // Fallback: Try muting and playing again
+              audioRef.current.muted = true
+              audioRef.current.play().catch(e => console.error('Fallback audio play failed:', e))
+            })
+        }
+      }
+    } catch (e) {
+      console.error('Error triggering audio:', e)
+    }
+  }
+
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader")
     scannerRef.current = html5QrCode
@@ -23,11 +44,8 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
           (decodedText) => {
             const parsed = parseBarcode(decodedText)
             if (parsed.valid) {
-              // Play beep sound
-              if (audioRef.current) {
-                audioRef.current.currentTime = 0
-                audioRef.current.play().catch(e => console.error('Audio playback failed:', e))
-              }
+              // Play beep sound on successful scan
+              playBeepSound()
               
               html5QrCode.stop().then(() => {
                 onScanSuccess(parsed)
@@ -57,8 +75,13 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
 
   return (
     <div className="max-w-md mx-auto relative mt-4 px-4 sm:px-0 animate-fadeInUp">
-      {/* Hidden audio element for beep sound */}
-      <audio ref={audioRef} src="/Barcode scanner beep sound (sound effect).mp3" />
+      {/* Audio element for beep sound - mobile optimized */}
+      <audio 
+        ref={audioRef} 
+        src="/Barcode scanner beep sound (sound effect).mp3"
+        preload="auto"
+        crossOrigin="anonymous"
+      />
       
       <div className="flex justify-between items-center mb-6">
         <div>
