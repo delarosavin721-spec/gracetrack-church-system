@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { getMembers } from '../../firebase/firestore'
-import { httpsCallable } from 'firebase/functions'
-import { functions } from '../../firebase/config'
 import { motion } from 'framer-motion'
 
 export default function EmailSender() {
@@ -10,6 +8,7 @@ export default function EmailSender() {
   const [loading, setLoading] = useState(false)
   const [sending, setSending] = useState(false)
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('success') // 'success' or 'error'
   const [emailType, setEmailType] = useState('receipt')
   const [customSubject, setCustomSubject] = useState('')
   const [customMessage, setCustomMessage] = useState('')
@@ -50,6 +49,7 @@ export default function EmailSender() {
   const sendEmails = async () => {
     if (selectedMembers.size === 0) {
       setMessage('❌ Please select at least one member')
+      setMessageType('error')
       return
     }
 
@@ -59,25 +59,36 @@ export default function EmailSender() {
     try {
       const selectedMembersList = members.filter(m => selectedMembers.has(m.id))
       
-      const sendBulkEmails = httpsCallable(functions, 'sendBulkEmails')
-      const result = await sendBulkEmails({
-        members: selectedMembersList,
-        emailType,
-        customSubject,
-        customMessage
+      // Call Vercel API route instead of Firebase function directly (fixes CORS)
+      const response = await fetch('/api/send-emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          members: selectedMembersList,
+          emailType,
+          customSubject,
+          customMessage
+        })
       })
-      
-      if (result.data.success) {
-        const failed = result.data.failed > 0 ? ` (${result.data.failed} failed)` : ''
-        setMessage(`✅ ${result.data.sent} emails sent successfully!${failed}`)
+
+      const result = await response.json()
+
+      if (result.success) {
+        setMessage(`✅ ${result.sent} emails sent successfully!${result.failed > 0 ? ` (${result.failed} failed)` : ''}`)
+        setMessageType('success')
         setSelectedMembers(new Set())
         setCustomSubject('')
         setCustomMessage('')
       } else {
-        setMessage(`❌ Error: ${result.data.error}`)
+        setMessage(`❌ Error: ${result.error}`)
+        setMessageType('error')
       }
     } catch (error) {
-      setMessage(`❌ Error sending emails: ${error.message}`)
+      setMessage(`❌ Connection Error: ${error.message}. Please check your internet and try again.`)
+      setMessageType('error')
+      console.error('Email send error:', error)
     }
 
     setSending(false)
@@ -196,13 +207,14 @@ export default function EmailSender() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`p-4 rounded-xl text-sm font-bold ${
-                message.startsWith('✅')
-                  ? 'bg-green-50 border border-green-200 text-green-700'
-                  : 'bg-red-50 border border-red-200 text-red-700'
+              className={`p-4 rounded-xl text-sm font-bold border-2 flex items-start gap-3 ${
+                messageType === 'success'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-red-50 border-red-200 text-red-700'
               }`}
             >
-              {message}
+              <span className="text-lg mt-0.5">{messageType === 'success' ? '✅' : '⚠️'}</span>
+              <span className="flex-1">{message}</span>
             </motion.div>
           )}
 
