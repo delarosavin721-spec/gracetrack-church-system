@@ -2,7 +2,8 @@
 // This proxies email sending requests to Firebase securely
 // No CORS issues since frontend calls same origin
 
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
+import nodemailer from 'nodemailer';
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
@@ -85,7 +86,6 @@ export default async function handler(req, res) {
     }
 
     // Get Nodemailer transporter (using environment variables)
-    const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT) || 465,

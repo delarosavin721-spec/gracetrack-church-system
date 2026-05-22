@@ -1,5 +1,12 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "./dist",
+  "env": {
+    "VITE_FIREBASE_API_KEY": "@firebase_api_key",
+    "VITE_FIREBASE_PROJECT_ID": "@firebase_project_id"
+  },
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
