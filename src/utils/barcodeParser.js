@@ -29,10 +29,6 @@ export const parseBarcode = (barcodeStr) => {
   // 2. Fallback: Treat the whole string as a Member ID
   // This allows simple QR codes that just contain the ID to work
   // We default to 'tithe' and current week if we can't determine them
-  import('./weekCode').then(({ getCurrentWeekCode }) => {
-    // Note: This is an async import, but we need a sync return for standard usage.
-    // However, in our React component we can handle this or just use a default.
-  }).catch(() => {})
 
   // For simplicity and immediate fix, we'll return it as a possible member ID
   // The AmountEntry component will try to find this ID in Firestore.
