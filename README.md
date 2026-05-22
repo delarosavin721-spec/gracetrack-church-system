@@ -1,5 +1,7 @@
 # GraceTrack - Church Management System
 
+Build: v0.0.1 (Fixed)
+
 GraceTrack is a modern, responsive Progressive Web App (PWA) built specifically for churches to streamline their operations, primarily focusing on tithes, offerings, member management, and attendance.
 
 ## Features
