@@ -245,12 +245,4 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
       </div>
     </div>
   )
-                </svg>
-              </>
-            )}
-          </button>
-        </form>
-      </div>
-    </div>
-  )
 }
