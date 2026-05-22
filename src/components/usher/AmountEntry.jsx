@@ -101,103 +101,150 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
   )
 
   return (
-    <div className="max-w-md mx-auto animate-fadeInUp px-4 pb-10">
+    <div className="max-w-2xl mx-auto animate-fadeInUp px-4 pb-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <button onClick={onCancel} className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Cancel
+          Back
         </button>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Live Entry</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Recording Entry</span>
         </div>
       </div>
 
-      <div className="card-flat overflow-hidden border-t-8 border-t-teal-600">
-        {/* Member Profile */}
-        <div className="px-6 py-6 border-b border-slate-100 bg-slate-50/30">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-teal-100 shrink-0">
-              {member?.name?.[0]?.toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <div className="font-playfair text-2xl font-bold text-slate-900 truncate">{member?.name}</div>
-              <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Week Code:</span>
-                <span className="text-xs font-mono font-bold text-teal-600">{effectiveWeekCode}</span>
+      <div className="space-y-6">
+        {/* Member Card */}
+        <div className="card-flat overflow-hidden border-t-8 border-t-teal-600 shadow-xl shadow-teal-100/50">
+          <div className="px-8 py-8 bg-gradient-to-br from-teal-50 via-white to-transparent">
+            <div className="flex items-center gap-6">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-teal-100 shrink-0">
+                {member?.name?.[0]?.toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Member</p>
+                <p className="font-playfair text-3xl font-bold text-slate-900 truncate">{member?.name}</p>
+                <div className="flex items-center gap-3 mt-3 flex-wrap">
+                  <span className="px-3 py-1.5 rounded-full bg-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider">📅 Week {effectiveWeekCode}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {error && <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-bold animate-shake">{error}</div>}
-
-          {/* Amount Inputs */}
-          <div className="space-y-4">
-            {/* Tithe */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tithes (Ikapu)</label>
-                <span className="text-[10px] font-bold text-teal-600 uppercase tracking-widest">10% Default</span>
+        {/* Amount Input Section */}
+        <div className="space-y-6">
+          {/* Tithe Input */}
+          <div className="card-flat overflow-hidden border-l-4 border-l-emerald-500 shadow-lg shadow-emerald-50">
+            <div className="px-8 py-6 bg-gradient-to-r from-emerald-50 to-transparent border-b border-emerald-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest">💚 Tithes (Ikapu)</p>
+                  <p className="text-sm text-slate-600 mt-1">10% of income - faithful giving</p>
+                </div>
               </div>
-              <div className="relative group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400 font-bold group-focus-within:text-teal-600 transition-colors">₱</span>
+            </div>
+            <div className="p-8">
+              <div className="relative group mb-2">
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-3xl font-bold text-emerald-400 group-focus-within:text-emerald-600 transition-colors">₱</span>
                 <input
-                  type="number" step="0.01" min="0"
-                  value={titheAmount} onChange={e => setTitheAmount(e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={titheAmount}
+                  onChange={e => setTitheAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full border-2 border-slate-100 focus:border-teal-500 rounded-2xl py-4 pl-10 pr-4 text-2xl font-bold font-outfit text-slate-900 transition-all outline-none bg-slate-50/50 focus:bg-white"
+                  className="w-full border-3 border-emerald-200 focus:border-emerald-500 rounded-2xl py-5 pl-16 pr-6 text-4xl font-bold font-outfit text-slate-900 transition-all outline-none bg-white focus:shadow-lg focus:shadow-emerald-200/50"
                   autoFocus
                 />
               </div>
+              <p className="text-xs text-slate-500 px-1">Enter the tithe amount</p>
             </div>
+          </div>
 
-            {/* Offering */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Offering (Handog)</label>
+          {/* Offering Input */}
+          <div className="card-flat overflow-hidden border-l-4 border-l-indigo-500 shadow-lg shadow-indigo-50">
+            <div className="px-8 py-6 bg-gradient-to-r from-indigo-50 to-transparent border-b border-indigo-100">
+              <div>
+                <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest">💙 Offering (Handog)</p>
+                <p className="text-sm text-slate-600 mt-1">Voluntary gift for the church</p>
               </div>
-              <div className="relative group">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400 font-bold group-focus-within:text-indigo-600 transition-colors">₱</span>
+            </div>
+            <div className="p-8">
+              <div className="relative group mb-2">
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-3xl font-bold text-indigo-400 group-focus-within:text-indigo-600 transition-colors">₱</span>
                 <input
-                  type="number" step="0.01" min="0"
-                  value={offeringAmount} onChange={e => setOfferingAmount(e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={offeringAmount}
+                  onChange={e => setOfferingAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full border-2 border-slate-100 focus:border-indigo-500 rounded-2xl py-4 pl-10 pr-4 text-2xl font-bold font-outfit text-slate-900 transition-all outline-none bg-slate-50/50 focus:bg-white"
+                  className="w-full border-3 border-indigo-200 focus:border-indigo-500 rounded-2xl py-5 pl-16 pr-6 text-4xl font-bold font-outfit text-slate-900 transition-all outline-none bg-white focus:shadow-lg focus:shadow-indigo-200/50"
                 />
               </div>
+              <p className="text-xs text-slate-500 px-1">Enter the offering amount</p>
             </div>
           </div>
 
-          {/* Note */}
-          <div className="space-y-2">
-            <label className="px-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Add Remark (Optional)</label>
-            <input
-              type="text" value={note} onChange={e => setNote(e.target.value)}
-              placeholder="e.g. For Mission Fund" 
-              className="w-full border-2 border-slate-100 focus:border-slate-300 rounded-xl py-3 px-4 text-sm font-medium transition-all outline-none bg-slate-50/50"
-            />
+          {/* Note Section */}
+          <div className="card-flat overflow-hidden border-l-4 border-l-slate-300 shadow-lg">
+            <div className="px-8 py-6 bg-gradient-to-r from-slate-50 to-transparent border-b border-slate-100">
+              <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">📝 Add Remark (Optional)</p>
+            </div>
+            <div className="p-8">
+              <input
+                type="text"
+                value={note}
+                onChange={e => setNote(e.target.value)}
+                placeholder="e.g., For Mission Fund, Building Fund, etc."
+                className="w-full border-2 border-slate-200 focus:border-slate-400 rounded-xl py-4 px-6 text-base font-medium text-slate-900 transition-all outline-none bg-slate-50/50 focus:bg-white placeholder:text-slate-400"
+              />
+            </div>
           </div>
+        </div>
 
-          {/* Submit */}
-          <button
-            type="submit" disabled={submitting || !member}
-            className="w-full py-4.5 rounded-2xl font-bold text-lg font-outfit transition-all flex items-center justify-center gap-3 bg-slate-900 text-white hover:bg-black shadow-xl shadow-slate-200 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-          >
-            {submitting ? (
-              <>
-                <div className="w-5 h-5 border-3 border-white/20 border-t-white rounded-full animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                Confirm Record
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        {/* Error Message */}
+        {error && (
+          <div className="p-5 rounded-xl bg-red-50 border-2 border-red-200 text-red-700 font-bold text-sm flex items-start gap-3 animate-shake">
+            <svg className="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          disabled={submitting || !member}
+          className={`w-full py-5 px-8 rounded-2xl font-bold text-lg uppercase tracking-wider transition-all flex items-center justify-center gap-3 font-outfit shadow-xl ${
+            submitting || !member
+              ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+              : 'bg-gradient-to-r from-slate-900 to-black text-white hover:from-black hover:to-slate-900 active:scale-95 shadow-slate-300 hover:shadow-slate-400'
+          }`}
+        >
+          {submitting ? (
+            <>
+              <div className="w-6 h-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              ✅ Confirm & Save
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  )
                 </svg>
               </>
             )}
