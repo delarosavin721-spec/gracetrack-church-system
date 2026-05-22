@@ -58,7 +58,7 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
   return (
     <div className="max-w-md mx-auto relative mt-4 px-4 sm:px-0 animate-fadeInUp">
       {/* Hidden audio element for beep sound */}
-      <audio ref={audioRef} src="/bgmusic/Barcode scanner beep sound (sound effect).mp3" />
+      <audio ref={audioRef} src="/Barcode scanner beep sound (sound effect).mp3" />
       
       <div className="flex justify-between items-center mb-6">
         <div>
