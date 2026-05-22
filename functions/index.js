@@ -328,3 +328,135 @@ exports.sendDailyDevotionals = functions.pubsub.schedule('0 6 * * *').timeZone('
     return { success: false, error: error.message }
   }
 })
+
+// Manual email sending - callable from admin UI
+exports.sendBulkEmails = functions.https.onCall(async (data, context) => {
+  // Verify user is authenticated and is admin
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'User must be logged in')
+  }
+
+  // Check if user is admin
+  const userDoc = await db.collection('users').doc(context.auth.uid).get()
+  if (!userDoc.exists || userDoc.data().role !== 'admin') {
+    throw new functions.https.HttpsError('permission-denied', 'Only admins can send emails')
+  }
+
+  const { members = [], emailType = 'receipt', customSubject = '', customMessage = '' } = data
+
+  if (!members || members.length === 0) {
+    throw new functions.https.HttpsError('invalid-argument', 'No members provided')
+  }
+
+  try {
+    const transporter = await getTransporter()
+    const settingsDoc = await db.collection('churchSettings').doc('main').get()
+    const churchName = settingsDoc.data()?.churchName || 'CCCCPGI'
+    
+    let sentCount = 0
+    let failedCount = 0
+
+    const sendPromises = members.map(async (member) => {
+      if (!member.email) return
+
+      try {
+        let htmlContent, subject
+
+        if (emailType === 'receipt') {
+          // Send tithe receipt (generic, no amount specified)
+          subject = `💚 Thank you for your faithful giving | ${churchName}`
+          const quote = getRandomQuote()
+          htmlContent = `
+            <h2 style="color: #059669; text-align: center;">Thank You for Your Generosity! 💚</h2>
+            <p style="font-size: 16px;">Salamat sa inyong katapatan, <strong>${member.name}</strong>! 🙏</p>
+            
+            <div style="background: #f0f9ff; border-left: 4px solid #059669; padding: 20px; margin: 30px 0; border-radius: 4px;">
+              <p style="margin: 0; color: #059669; font-weight: 600;">📖 Inspirational Message</p>
+              <p style="margin: 15px 0 5px 0; font-style: italic; font-size: 16px; color: #0f172a;">"${quote.text}"</p>
+              <p style="margin: 5px 0; color: #718096; font-size: 13px;">— ${quote.verse}</p>
+            </div>
+
+            <p style="font-size: 15px; line-height: 1.6;">Your faithful giving is recorded in our hearts and in God's ledger. Every tithe and offering strengthens our church community and advances God's kingdom. 💝</p>
+            
+            <p style="color: #4b5563; font-size: 14px;">With gratitude,<br><strong>${churchName}</strong></p>
+          `
+        } else if (emailType === 'devotional') {
+          // Send inspirational verse
+          subject = `📖 Your Daily Inspiration | ${churchName}`
+          const quote = getRandomQuote()
+          htmlContent = `
+            <h2 style="color: #D4A853; text-align: center;">🌅 Good Morning!</h2>
+            <p style="font-size: 16px;">Hello <strong>${member.name}</strong>,</p>
+            
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 25px; margin: 30px 0; border-radius: 4px;">
+              <p style="margin: 0; color: #92400e; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Daily Verse</p>
+              <p style="margin: 15px 0 5px 0; font-style: italic; font-size: 18px; color: #78350f; font-family: Georgia, serif;">"${quote.text}"</p>
+              <p style="margin: 5px 0; color: #b45309; font-size: 13px; font-weight: 600;">— ${quote.verse}</p>
+            </div>
+
+            <p style="font-size: 15px; line-height: 1.6;">Take a moment today to reflect on God's word and allow it to guide your day. Remember, you are loved and blessed! 🙏</p>
+            
+            <p style="color: #4b5563; font-size: 14px;">May God bless your day,<br><strong>${churchName}</strong></p>
+          `
+        } else if (emailType === 'custom') {
+          // Send custom email
+          subject = customSubject || 'Message from ' + churchName
+          htmlContent = `
+            <h2 style="color: #0F172A;">${customSubject}</h2>
+            <p style="font-size: 16px;">Hello <strong>${member.name}</strong>,</p>
+            <div style="font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${customMessage}</div>
+            <p style="color: #4b5563; font-size: 14px; margin-top: 30px;">Blessings,<br><strong>${churchName}</strong></p>
+          `
+        }
+
+        await transporter.sendMail({
+          from: `"${churchName}" <${process.env.SMTP_USER}>`,
+          to: member.email,
+          subject: subject,
+          html: emailHtmlWrapper(htmlContent)
+        })
+
+        // Log successful send
+        await db.collection('emailLogs').add({
+          memberId: member.id,
+          memberEmail: member.email,
+          type: emailType,
+          sentAt: admin.firestore.FieldValue.serverTimestamp(),
+          status: 'success',
+          sentBy: context.auth.uid,
+          sentByEmail: context.auth.token.email
+        })
+
+        sentCount++
+        console.log(`Email sent to ${member.email}`)
+      } catch (err) {
+        failedCount++
+        console.error(`Failed to send email to ${member.email}:`, err)
+        
+        // Log failed send
+        await db.collection('emailLogs').add({
+          memberId: member.id,
+          memberEmail: member.email,
+          type: emailType,
+          sentAt: admin.firestore.FieldValue.serverTimestamp(),
+          status: 'failed',
+          error: err.message,
+          sentBy: context.auth.uid,
+          sentByEmail: context.auth.token.email
+        })
+      }
+    })
+
+    await Promise.all(sendPromises)
+
+    return {
+      success: true,
+      sent: sentCount,
+      failed: failedCount,
+      total: members.length
+    }
+  } catch (error) {
+    console.error('Error in sendBulkEmails:', error)
+    throw new functions.https.HttpsError('internal', error.message)
+  }
+})

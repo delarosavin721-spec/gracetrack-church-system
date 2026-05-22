@@ -11,6 +11,7 @@ import AttendanceTracker from '../components/admin/AttendanceTracker'
 import Settings from '../components/admin/Settings'
 import ReportsPanel from '../components/admin/ReportsPanel'
 import UserManagement from '../components/admin/UserManagement'
+import EmailSender from '../components/admin/EmailSender'
 import DefaultAdminSetupNotice from '../components/admin/DefaultAdminSetupNotice'
 import PageBackground from '../components/shared/PageBackground'
 
@@ -40,6 +41,7 @@ export default function AdminHome() {
             <Route path="/transactions" element={<TransactionsLog />} />
             <Route path="/attendance" element={<AttendanceTracker />} />
             <Route path="/reports" element={<ReportsPanel />} />
+            <Route path="/emails" element={<EmailSender />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/admin" replace />} />
