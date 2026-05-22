@@ -6,6 +6,7 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
   const [error, setError] = useState('')
   const [isInitializing, setIsInitializing] = useState(true)
   const scannerRef = useRef(null)
+  const audioRef = useRef(null)
 
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("reader")
@@ -22,6 +23,12 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
           (decodedText) => {
             const parsed = parseBarcode(decodedText)
             if (parsed.valid) {
+              // Play beep sound
+              if (audioRef.current) {
+                audioRef.current.currentTime = 0
+                audioRef.current.play().catch(e => console.error('Audio playback failed:', e))
+              }
+              
               html5QrCode.stop().then(() => {
                 onScanSuccess(parsed)
               })
@@ -50,6 +57,9 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
 
   return (
     <div className="max-w-md mx-auto relative mt-4 px-4 sm:px-0 animate-fadeInUp">
+      {/* Hidden audio element for beep sound */}
+      <audio ref={audioRef} src="/bgmusic/Barcode scanner beep sound (sound effect).mp3" />
+      
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="font-playfair text-2xl text-slate-900 font-bold">
