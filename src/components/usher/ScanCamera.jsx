@@ -13,16 +13,11 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
       if (audioRef.current) {
         audioRef.current.currentTime = 0
         const playPromise = audioRef.current.play()
-        if (playPromise !== undefined) {
           playPromise
             .then(() => console.log('Beep sound played successfully'))
             .catch(error => {
               console.error('Audio playback failed:', error)
-              // Fallback: Try muting and playing again
-              audioRef.current.muted = true
-              audioRef.current.play().catch(e => console.error('Fallback audio play failed:', e))
             })
-        }
       }
     } catch (e) {
       console.error('Error triggering audio:', e)
@@ -78,7 +73,7 @@ export default function ScanCamera({ onScanSuccess, onCancel }) {
       {/* Audio element for beep sound - mobile optimized */}
       <audio 
         ref={audioRef} 
-        src="/Barcode scanner beep sound (sound effect).mp3"
+        src="/beep.mp3"
         preload="auto"
         crossOrigin="anonymous"
       />
