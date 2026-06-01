@@ -148,8 +148,8 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
               </div>
             </div>
             <div className="p-8">
-              <div className="relative group mb-2">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-3xl font-bold text-emerald-400 group-focus-within:text-emerald-600 transition-colors">₱</span>
+              <div className="flex items-center w-full border-3 border-emerald-200 focus-within:border-emerald-500 focus-within:shadow-lg focus-within:shadow-emerald-200/50 rounded-2xl px-6 py-5 bg-white transition-all group mb-2">
+                <span className="text-3xl font-bold text-emerald-400 group-focus-within:text-emerald-600 transition-colors mr-3 mt-0.5">₱</span>
                 <input
                   type="number"
                   step="0.01"
@@ -157,7 +157,7 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
                   value={titheAmount}
                   onChange={e => setTitheAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full border-3 border-emerald-200 focus:border-emerald-500 rounded-2xl py-5 pl-16 pr-6 text-4xl font-bold font-outfit text-slate-900 transition-all outline-none bg-white focus:shadow-lg focus:shadow-emerald-200/50"
+                  className="flex-1 w-full text-4xl font-bold font-outfit text-slate-900 outline-none bg-transparent placeholder-slate-300"
                   autoFocus
                 />
               </div>
@@ -174,8 +174,8 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
               </div>
             </div>
             <div className="p-8">
-              <div className="relative group mb-2">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-3xl font-bold text-indigo-400 group-focus-within:text-indigo-600 transition-colors">₱</span>
+              <div className="flex items-center w-full border-3 border-indigo-200 focus-within:border-indigo-500 focus-within:shadow-lg focus-within:shadow-indigo-200/50 rounded-2xl px-6 py-5 bg-white transition-all group mb-2">
+                <span className="text-3xl font-bold text-indigo-400 group-focus-within:text-indigo-600 transition-colors mr-3 mt-0.5">₱</span>
                 <input
                   type="number"
                   step="0.01"
@@ -183,7 +183,7 @@ export default function AmountEntry({ data, onComplete, onCancel }) {
                   value={offeringAmount}
                   onChange={e => setOfferingAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full border-3 border-indigo-200 focus:border-indigo-500 rounded-2xl py-5 pl-16 pr-6 text-4xl font-bold font-outfit text-slate-900 transition-all outline-none bg-white focus:shadow-lg focus:shadow-indigo-200/50"
+                  className="flex-1 w-full text-4xl font-bold font-outfit text-slate-900 outline-none bg-transparent placeholder-slate-300"
                 />
               </div>
               <p className="text-xs text-slate-500 px-1">Enter the offering amount</p>
